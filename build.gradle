@@ -1,0 +1,58 @@
+buildscript {
+    ext.vertxVersion = '3.5.2'
+    ext.lombokVersion = '1.16.22'
+    ext.kotlin_version = '1.2.30'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+apply plugin: 'kotlin'
+group 'com.github.relyativus.vert-java'
+version '0.1.0'
+
+sourceCompatibility = 10
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // https://mvnrepository.com/artifact/io.vertx/vertx-core
+    compile group: 'io.vertx', name: 'vertx-core', version: "$vertxVersion"
+    // https://mvnrepository.com/artifact/io.vertx/vertx-web
+    compile group: 'io.vertx', name: 'vertx-web', version: "$vertxVersion"
+
+    // https://mvnrepository.com/artifact/io.vertx/vertx-web
+    compile group: 'io.vertx', name: 'vertx-codegen', version: "$vertxVersion"
+    // https://mvnrepository.com/artifact/io.vertx/vertx-rx-java2
+    compile group: 'io.vertx', name: 'vertx-rx-java2', version: "$vertxVersion"
+    // https://mvnrepository.com/artifact/io.vertx/vertx-config
+    compile group: 'io.vertx', name: 'vertx-config', version: "$vertxVersion"
+
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.22'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    // https://mvnrepository.com/artifact/javax.xml/jaxb-api
+    compile group: 'javax.xml', name: 'jaxb-api', version: '2.1'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+mainClassName = 'com.github.relyativus.vertx.java.AppRunner'
+
+shadowJar {
+    classifier = 'fat'
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
